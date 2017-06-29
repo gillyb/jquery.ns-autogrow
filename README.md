@@ -40,6 +40,7 @@ List of options:
 Option | Description
 -------|------------
 vertical | (true/false) - Enable/Disable vertical autogrow (true by default)
+shrinkVertical | (true/false) - If enabled, it will shrink the height of the textarea beyond it's original height.
 horizontal | (true/false) - Enable/Disable horizontal autogrow (true by default)
 postGrowCallback | Post grow callback. Executes after dimensions of textarea have been adjusted.
 flickering | (true/false) - Enable/Disable flickering. If flickering is disabled, extra line will be added to textarea. Flickering is _enabled_ by default.

@@ -18,6 +18,9 @@
       if (options.vertical == null) {
         options.vertical = true;
       }
+      if (options.shrinkVertical == null) {
+        options.shrinkVertical = false;
+      }
       if (options.debugx == null) {
         options.debugx = -10000;
       }
@@ -40,7 +43,7 @@
         return;
       }
       return this.filter('textarea').each(function() {
-        var $e, $shadow, fontSize, heightPadding, minHeight, minWidth, update;
+        var $e, $shadow, fontSize, heightPadding, lineHeight, minHeight, minWidth, update;
         $e = $(this);
         if ($e.data('autogrow-enabled')) {
           return;
@@ -48,7 +51,8 @@
         $e.data('autogrow-enabled');
         minHeight = $e.height();
         minWidth = $e.width();
-        heightPadding = $e.css('lineHeight') * 1 || 0;
+        lineHeight = $e.css('lineHeight');
+        heightPadding = lineHeight * 1 || 0;
         $e.hasVerticalScrollBar = function() {
           return $e[0].clientHeight < $e[0].scrollHeight;
         };
@@ -63,7 +67,7 @@
           fontSize: $e.css('fontSize'),
           fontFamily: $e.css('fontFamily'),
           fontWeight: $e.css('fontWeight'),
-          lineHeight: $e.css('lineHeight'),
+          lineHeight: lineHeight,
           resize: 'none',
           'word-wrap': 'break-word'
         }).appendTo(document.body);
@@ -78,7 +82,7 @@
         }
         update = (function(_this) {
           return function(event) {
-            var height, val, width;
+            var height, shadowHeight, val, width;
             val = _this.value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n /g, '<br/>&nbsp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/\n$/, '<br/>&nbsp;').replace(/\n/g, '<br/>').replace(/ {2,}/g, function(space) {
               return Array(space.length - 1).join('&nbsp;') + ' ';
             });
@@ -90,7 +94,12 @@
             }
             $shadow.html(val);
             if (options.vertical === true) {
-              height = Math.max($shadow.height() + heightPadding, minHeight);
+              shadowHeight = $shadow.height() + heightPadding;
+              if (options.shrinkVertical === true) {
+                height = Math.max(shadowHeight, parseInt(lineHeight));
+              } else {
+                height = Math.max(shadowHeight, minHeight);
+              }
               $e.height(height);
             }
             if (options.horizontal === true) {

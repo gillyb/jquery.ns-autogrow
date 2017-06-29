@@ -1,14 +1,15 @@
 (($, window) ->
 
   $.fn.autogrow = (options) ->
-    options            ?= {}
-    options.horizontal ?= true
-    options.vertical   ?= true
-    options.debugx     ?= -10000
-    options.debugy     ?= -10000
-    options.debugcolor ?= 'yellow'
-    options.flickering ?= true
-    options.postGrowCallback ?= ->
+    options                   ?= {}
+    options.horizontal        ?= true
+    options.vertical          ?= true
+    options.shrinkVertical    ?= false
+    options.debugx            ?= -10000
+    options.debugy            ?= -10000
+    options.debugcolor        ?= 'yellow'
+    options.flickering        ?= true
+    options.postGrowCallback  ?= ->
     options.verticalScrollbarWidth ?= getVerticalScrollbarWidth()
 
     if options.horizontal is false and options.vertical is false
@@ -23,7 +24,8 @@
 
       minHeight     = $e.height()
       minWidth      = $e.width()
-      heightPadding = $e.css('lineHeight') * 1 || 0
+      lineHeight    = $e.css 'lineHeight'
+      heightPadding = lineHeight * 1 || 0
       $e.hasVerticalScrollBar = ->
         $e[0].clientHeight < $e[0].scrollHeight
 
@@ -39,7 +41,7 @@
           fontSize:           $e.css 'fontSize'
           fontFamily:         $e.css 'fontFamily'
           fontWeight:         $e.css 'fontWeight'
-          lineHeight:         $e.css 'lineHeight'
+          lineHeight:         lineHeight
           resize:             'none'
           'word-wrap':        'break-word' )
         .appendTo document.body
@@ -79,7 +81,11 @@
         $shadow.html val
 
         if options.vertical is true
-          height = Math.max($shadow.height() + heightPadding, minHeight)
+          shadowHeight = $shadow.height() + heightPadding
+          if options.shrinkVertical is true
+            height = Math.max(shadowHeight, parseInt(lineHeight))
+          else
+            height = Math.max(shadowHeight, minHeight)
           $e.height height
 
         if options.horizontal is true
