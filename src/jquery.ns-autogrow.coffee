@@ -83,7 +83,7 @@
         if options.vertical is true
           shadowHeight = $shadow.height() + heightPadding
           if options.shrinkVertical is true
-            height = Math.max(shadowHeight, parseInt(lineHeight))
+            height = shadowHeight
           else
             height = Math.max(shadowHeight, minHeight)
           $e.height height

@@ -96,7 +96,7 @@
             if (options.vertical === true) {
               shadowHeight = $shadow.height() + heightPadding;
               if (options.shrinkVertical === true) {
-                height = Math.max(shadowHeight, parseInt(lineHeight));
+                height = shadowHeight;
               } else {
                 height = Math.max(shadowHeight, minHeight);
               }
